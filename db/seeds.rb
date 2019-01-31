@@ -5,6 +5,31 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-12.times do
-  comm = Comment.create(comment: Faker::GreekPhilosophers.quote, user_id: rand(1..5), pin_id: rand(1..10))
+User.destroy_all
+Pin.destroy_all
+Comment.destroy_all
+
+10.times do
+ user = User.new
+ first_name = Faker::Name.unique.first_name
+ user.first_name = first_name
+ user.last_name = Faker::Name.unique.last_name
+ user.email = Faker::Internet.unique.safe_email(first_name)
+ user.save
+end
+
+10.times do
+ user = User.all.sample
+    pin = Pin.new
+    pin.user = user
+ pin.url = Faker::Internet.url('example.com')
+    pin.save
+end
+
+15.times do
+ comment = Comment.new
+ comment.content = Faker::Lovecraft.paragraph
+ comment.user = User.all.sample
+ comment.pin = Pin.all.sample
+ comment.save
 end
